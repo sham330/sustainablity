@@ -13,26 +13,28 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer
+  ResponsiveContainer,
 } from "recharts";
-import { 
-  Trash2, 
-  Award, 
-  Leaf, 
-  BarChart2, 
-  Calendar, 
+import {
+  Trash2,
+  Award,
+  Leaf,
+  BarChart2,
+  Calendar,
   TrendingDown,
   Repeat,
-  AlertTriangle
+  AlertTriangle,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
+// In your header:
 const Dashboard = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState("overview");
 
-/*useEffect(() => {
+  /*useEffect(() => {
     const fetchUserData = async () => {
       try {
         setLoading(true);
@@ -63,7 +65,7 @@ const Dashboard = () => {
   // Mock data for demonstration
   const mockData = {
     name: "Alex Johnson",
-    email: "alex@example.com",
+    email: "alex@gmail.com",
     totalPoints: 1250,
     level: "Eco Warrior",
     nextLevelPoints: 1500,
@@ -79,7 +81,7 @@ const Dashboard = () => {
       { name: "Plastic", value: 45, type: "Non-Renewable", color: "#FF8042" },
       { name: "Paper", value: 30, type: "Renewable", color: "#00C49F" },
       { name: "Glass", value: 15, type: "Renewable", color: "#0088FE" },
-      { name: "Metal", value: 10, type: "Non-Renewable", color: "#FFBB28" }
+      { name: "Metal", value: 10, type: "Non-Renewable", color: "#FFBB28" },
     ],
     carbonFootprint: [
       { month: "Jan", reduced: 12, emitted: 38 },
@@ -107,14 +109,12 @@ const Dashboard = () => {
       "Separate your waste into recyclable and non-recyclable categories.",
       "Consider composting food waste to reduce landfill contribution.",
       "Choose products with minimal packaging to reduce waste.",
-      "Use reusable bags, bottles, and containers whenever possible."
-    ]
+      "Use reusable bags, bottles, and containers whenever possible.",
+    ],
   };
 
   // Use mock data for demonstration
-  const data =  mockData;
-
-  
+  const data = mockData;
 
   if (error) {
     return (
@@ -138,30 +138,39 @@ const Dashboard = () => {
 
   // Calculate renewable vs non-renewable percentages
   const renewableResources = data.resourceSubmissions
-    .filter(item => item.type === "Renewable")
+    .filter((item) => item.type === "Renewable")
     .reduce((acc, item) => acc + item.value, 0);
-  
+
   const nonRenewableResources = data.resourceSubmissions
-    .filter(item => item.type === "Non-Renewable")
+    .filter((item) => item.type === "Non-Renewable")
     .reduce((acc, item) => acc + item.value, 0);
 
   const totalResources = renewableResources + nonRenewableResources;
-  const renewablePercentage = ((renewableResources / totalResources) * 100).toFixed(1);
-  const nonRenewablePercentage = ((nonRenewableResources / totalResources) * 100).toFixed(1);
+  const renewablePercentage = (
+    (renewableResources / totalResources) *
+    100
+  ).toFixed(1);
+  const nonRenewablePercentage = (
+    (nonRenewableResources / totalResources) *
+    100
+  ).toFixed(1);
 
   // Calculate total carbon footprint reduction
   const totalReduction = data.carbonFootprint.reduce(
-    (acc, month) => acc + month.reduced, 0
+    (acc, month) => acc + month.reduced,
+    0
   );
-  
+
   // Calculate total carbon footprint emitted
   const totalEmission = data.carbonFootprint.reduce(
-    (acc, month) => acc + month.emitted, 0
+    (acc, month) => acc + month.emitted,
+    0
   );
 
   // Carbon reduction percentage
   const carbonReductionPercentage = (
-    (totalReduction / (totalReduction + totalEmission)) * 100
+    (totalReduction / (totalReduction + totalEmission)) *
+    100
   ).toFixed(1);
 
   const renderTabContent = () => {
@@ -182,7 +191,9 @@ const Dashboard = () => {
               <div className="mt-4">
                 <div className="flex justify-between mb-1">
                   <span className="text-sm">Progress to {data.level}</span>
-                  <span className="text-sm">{progressPercentage.toFixed(0)}%</span>
+                  <span className="text-sm">
+                    {progressPercentage.toFixed(0)}%
+                  </span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2.5">
                   <div
@@ -206,15 +217,23 @@ const Dashboard = () => {
               <div className="mt-4 flex justify-between">
                 <div>
                   <p className="text-sm text-gray-500">Recyclable</p>
-                  <p className="font-semibold">{
-                    data.wasteData.reduce((acc, month) => acc + month.recyclable, 0)
-                  } kg</p>
+                  <p className="font-semibold">
+                    {data.wasteData.reduce(
+                      (acc, month) => acc + month.recyclable,
+                      0
+                    )}{" "}
+                    kg
+                  </p>
                 </div>
                 <div>
                   <p className="text-sm text-gray-500">Non-recyclable</p>
-                  <p className="font-semibold">{
-                    data.wasteData.reduce((acc, month) => acc + month.nonRecyclable, 0)
-                  } kg</p>
+                  <p className="font-semibold">
+                    {data.wasteData.reduce(
+                      (acc, month) => acc + month.nonRecyclable,
+                      0
+                    )}{" "}
+                    kg
+                  </p>
                 </div>
               </div>
             </div>
@@ -228,15 +247,21 @@ const Dashboard = () => {
               <div className="flex justify-between items-center">
                 <div>
                   <p className="text-sm text-gray-500">Reduced</p>
-                  <p className="font-semibold text-green-500">{totalReduction} kg</p>
+                  <p className="font-semibold text-green-500">
+                    {totalReduction} kg
+                  </p>
                 </div>
                 <div className="text-center">
-                  <p className="text-lg font-bold">{carbonReductionPercentage}%</p>
+                  <p className="text-lg font-bold">
+                    {carbonReductionPercentage}%
+                  </p>
                   <p className="text-xs text-gray-500">reduction</p>
                 </div>
                 <div className="text-right">
                   <p className="text-sm text-gray-500">Emitted</p>
-                  <p className="font-semibold text-red-500">{totalEmission} kg</p>
+                  <p className="font-semibold text-red-500">
+                    {totalEmission} kg
+                  </p>
                 </div>
               </div>
               <div className="mt-4">
@@ -258,11 +283,15 @@ const Dashboard = () => {
               <div className="flex justify-between items-center">
                 <div>
                   <p className="text-sm text-gray-500">Renewable</p>
-                  <p className="font-semibold text-green-500">{renewablePercentage}%</p>
+                  <p className="font-semibold text-green-500">
+                    {renewablePercentage}%
+                  </p>
                 </div>
                 <div>
                   <p className="text-sm text-gray-500">Non-renewable</p>
-                  <p className="font-semibold text-orange-500">{nonRenewablePercentage}%</p>
+                  <p className="font-semibold text-orange-500">
+                    {nonRenewablePercentage}%
+                  </p>
                 </div>
               </div>
               <div className="mt-4 h-64">
@@ -277,7 +306,9 @@ const Dashboard = () => {
                       fill="#8884d8"
                       dataKey="value"
                       nameKey="name"
-                      label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                      label={({ name, percent }) =>
+                        `${name}: ${(percent * 100).toFixed(0)}%`
+                      }
                     >
                       {data.resourceSubmissions.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={entry.color} />
@@ -324,7 +355,9 @@ const Dashboard = () => {
               </div>
               <ul className="list-disc pl-5 space-y-2">
                 {data.tips.map((tip, index) => (
-                  <li key={index} className="text-gray-700">{tip}</li>
+                  <li key={index} className="text-gray-700">
+                    {tip}
+                  </li>
                 ))}
               </ul>
             </div>
@@ -335,7 +368,9 @@ const Dashboard = () => {
         return (
           <div className="space-y-6">
             <div className="bg-white p-6 rounded-lg shadow">
-              <h3 className="text-lg font-semibold mb-4">Monthly Waste Analysis</h3>
+              <h3 className="text-lg font-semibold mb-4">
+                Monthly Waste Analysis
+              </h3>
               <div className="h-80">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={data.wasteData}>
@@ -344,8 +379,16 @@ const Dashboard = () => {
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Bar dataKey="recyclable" name="Recyclable Waste" fill="#00C49F" />
-                    <Bar dataKey="nonRecyclable" name="Non-recyclable Waste" fill="#FF8042" />
+                    <Bar
+                      dataKey="recyclable"
+                      name="Recyclable Waste"
+                      fill="#00C49F"
+                    />
+                    <Bar
+                      dataKey="nonRecyclable"
+                      name="Non-recyclable Waste"
+                      fill="#FF8042"
+                    />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -353,7 +396,9 @@ const Dashboard = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-white p-6 rounded-lg shadow">
-                <h3 className="text-lg font-semibold mb-4">Waste Type Distribution</h3>
+                <h3 className="text-lg font-semibold mb-4">
+                  Waste Type Distribution
+                </h3>
                 <div className="h-64">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
@@ -366,7 +411,9 @@ const Dashboard = () => {
                         fill="#8884d8"
                         dataKey="value"
                         nameKey="name"
-                        label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                        label={({ name, percent }) =>
+                          `${name}: ${(percent * 100).toFixed(0)}%`
+                        }
                       >
                         {data.resourceSubmissions.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.color} />
@@ -380,9 +427,13 @@ const Dashboard = () => {
               </div>
 
               <div className="bg-white p-6 rounded-lg shadow">
-                <h3 className="text-lg font-semibold mb-4">Recycling Performance</h3>
+                <h3 className="text-lg font-semibold mb-4">
+                  Recycling Performance
+                </h3>
                 <div className="mb-6">
-                  <h4 className="text-md font-medium mb-2">Renewable Resources</h4>
+                  <h4 className="text-md font-medium mb-2">
+                    Renewable Resources
+                  </h4>
                   <div className="w-full bg-gray-200 rounded-full h-4">
                     <div
                       className="bg-green-500 h-4 rounded-full text-xs flex items-center justify-center text-white"
@@ -393,7 +444,9 @@ const Dashboard = () => {
                   </div>
                 </div>
                 <div>
-                  <h4 className="text-md font-medium mb-2">Non-renewable Resources</h4>
+                  <h4 className="text-md font-medium mb-2">
+                    Non-renewable Resources
+                  </h4>
                   <div className="w-full bg-gray-200 rounded-full h-4">
                     <div
                       className="bg-orange-500 h-4 rounded-full text-xs flex items-center justify-center text-white"
@@ -412,7 +465,9 @@ const Dashboard = () => {
         return (
           <div className="space-y-6">
             <div className="bg-white p-6 rounded-lg shadow">
-              <h3 className="text-lg font-semibold mb-4">Carbon Footprint Analysis</h3>
+              <h3 className="text-lg font-semibold mb-4">
+                Carbon Footprint Analysis
+              </h3>
               <div className="h-80">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={data.carbonFootprint}>
@@ -421,8 +476,16 @@ const Dashboard = () => {
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Bar dataKey="reduced" name="Carbon Reduced" fill="#00C49F" />
-                    <Bar dataKey="emitted" name="Carbon Emitted" fill="#FF8042" />
+                    <Bar
+                      dataKey="reduced"
+                      name="Carbon Reduced"
+                      fill="#00C49F"
+                    />
+                    <Bar
+                      dataKey="emitted"
+                      name="Carbon Emitted"
+                      fill="#FF8042"
+                    />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -430,32 +493,46 @@ const Dashboard = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-white p-6 rounded-lg shadow">
-                <h3 className="text-lg font-semibold mb-4">Carbon Reduction Impact</h3>
+                <h3 className="text-lg font-semibold mb-4">
+                  Carbon Reduction Impact
+                </h3>
                 <div className="text-center mb-4">
-                  <span className="text-3xl font-bold text-green-500">{totalReduction}</span>
+                  <span className="text-3xl font-bold text-green-500">
+                    {totalReduction}
+                  </span>
                   <span className="text-gray-500 ml-2">kg CO₂ reduced</span>
                 </div>
                 <div className="mb-4 text-center">
-                  <span className="text-lg font-medium">That's equivalent to:</span>
+                  <span className="text-lg font-medium">
+                    That's equivalent to:
+                  </span>
                 </div>
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span>Trees planted:</span>
-                    <span className="font-medium">{Math.round(totalReduction / 20)}</span>
+                    <span className="font-medium">
+                      {Math.round(totalReduction / 20)}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span>Car miles avoided:</span>
-                    <span className="font-medium">{Math.round(totalReduction * 2.5)}</span>
+                    <span className="font-medium">
+                      {Math.round(totalReduction * 2.5)}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span>Energy saved (kWh):</span>
-                    <span className="font-medium">{Math.round(totalReduction * 1.5)}</span>
+                    <span className="font-medium">
+                      {Math.round(totalReduction * 1.5)}
+                    </span>
                   </div>
                 </div>
               </div>
 
               <div className="bg-white p-6 rounded-lg shadow">
-                <h3 className="text-lg font-semibold mb-4">Carbon Footprint Trend</h3>
+                <h3 className="text-lg font-semibold mb-4">
+                  Carbon Footprint Trend
+                </h3>
                 <div className="h-64">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={data.carbonFootprint}>
@@ -464,19 +541,19 @@ const Dashboard = () => {
                       <YAxis />
                       <Tooltip />
                       <Legend />
-                      <Line 
-                        type="monotone" 
-                        dataKey="emitted" 
+                      <Line
+                        type="monotone"
+                        dataKey="emitted"
                         name="Carbon Emitted"
-                        stroke="#FF8042" 
-                        strokeWidth={2} 
+                        stroke="#FF8042"
+                        strokeWidth={2}
                       />
-                      <Line 
-                        type="monotone" 
-                        dataKey="reduced" 
+                      <Line
+                        type="monotone"
+                        dataKey="reduced"
                         name="Carbon Reduced"
-                        stroke="#00C49F" 
-                        strokeWidth={2} 
+                        stroke="#00C49F"
+                        strokeWidth={2}
                       />
                     </LineChart>
                   </ResponsiveContainer>
@@ -515,10 +592,12 @@ const Dashboard = () => {
               <h3 className="text-lg font-semibold mb-4">Your Achievements</h3>
               <div className="space-y-4">
                 {data.achievements.map((achievement) => (
-                  <div 
-                    key={achievement.id} 
+                  <div
+                    key={achievement.id}
                     className={`p-4 rounded-lg border ${
-                      achievement.completed ? "border-green-500 bg-green-50" : "border-gray-300"
+                      achievement.completed
+                        ? "border-green-500 bg-green-50"
+                        : "border-gray-300"
                     }`}
                   >
                     <div className="flex justify-between items-center">
@@ -541,9 +620,13 @@ const Dashboard = () => {
                       </div>
                       <div>
                         {achievement.completed ? (
-                          <span className="text-green-500 font-medium text-sm">Completed</span>
+                          <span className="text-green-500 font-medium text-sm">
+                            Completed
+                          </span>
                         ) : (
-                          <span className="text-gray-500 font-medium text-sm">Incomplete</span>
+                          <span className="text-gray-500 font-medium text-sm">
+                            Incomplete
+                          </span>
                         )}
                       </div>
                     </div>
@@ -561,7 +644,8 @@ const Dashboard = () => {
                 <div>
                   <h4 className="text-xl font-medium">{data.level}</h4>
                   <p className="text-gray-500">
-                    {data.totalPoints} / {data.nextLevelPoints} points to next level
+                    {data.totalPoints} / {data.nextLevelPoints} points to next
+                    level
                   </p>
                 </div>
               </div>
@@ -588,7 +672,32 @@ const Dashboard = () => {
       <header className="bg-white shadow">
         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-gray-900">Waste Management Dashboard</h1>
+            <div className="flex items-center">
+              {" "}
+              <Link
+                to="/"
+                className="mr-4 text-gray-500 hover:text-gray-700"
+                aria-label="Go back to home"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                  />
+                </svg>
+              </Link>
+              <h1 className="text-2xl font-bold text-gray-900">
+                Waste Management Dashboard
+              </h1>
+            </div>
             <div className="flex items-center">
               <div className="mr-4 text-right">
                 <p className="text-sm font-medium text-gray-900">{data.name}</p>
@@ -596,7 +705,10 @@ const Dashboard = () => {
               </div>
               <div className="h-10 w-10 rounded-full bg-green-500 flex items-center justify-center">
                 <span className="text-white font-medium">
-                  {data.name.split(' ').map(n => n[0]).join('')}
+                  {data.name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")}
                 </span>
               </div>
             </div>
